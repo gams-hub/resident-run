@@ -210,6 +210,7 @@ function vToday(){
       <div class="cap" style="--c:var(--db);margin-top:12px"><i style="width:${clamp(jm/last*100,0,100)}%"></i></div>
       <div class="soft small" style="margin-top:6px">${nxt?`Nächster Halt in ${(nxt.hrs-jm).toFixed(1)} h of German`:'Willkommen in München'}</div></div></section>`}
   h+=`<div class="eyebrow-s">Last 7 days</div><section class="list"><div class="bars">${week.map((w,i)=>`<div class="${i===6?'td':''}"><i style="height:${Math.max(4,w.n/mx*56)}px"></i>${w.lab}</div>`).join('')}</div><div style="height:12px"></div></section>`;
+  h+=`<button class="rcard" data-act="replay"><span>Replay</span><b>Your study story so far</b><i>Open</i></button>`;
   h+=`<div class="eyebrow-s">Connected to Claude</div><section class="list">
     <div class="item"><div class="row sp"><div class="row"><span class="dot"></span><div><div>Linked to GitHub</div><div class="soft small">gams-hub/resident-run</div></div></div><a class="tb" href="https://github.com/gams-hub/resident-run" target="_blank" rel="noopener noreferrer">Open</a></div></div>
     <div class="item row sp"><div><div>App version</div><div class="soft small">${esc(APP_VERSION)} · ${SYNC_AT?'synced '+esc(new Date(SYNC_AT).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})):'not synced yet'}</div></div><button class="tb" data-act="checkupdate">Check for updates</button></div>
@@ -441,6 +442,8 @@ document.addEventListener('click',async e=>{
   const A={
     tab(){S.tab=v;save();render();window.scrollTo(0,0)},
     async checkupdate(){toast('Checking for updates');await syncData();const up=await codeCheck(true);if(!up)toast('You have the latest version');render()},
+    replay(){openReplay()},
+    closereplay(){const r=document.querySelector('.rply');if(r)r.remove();document.body.style.overflow=''},
     clearnotes(){S.notices=[];save();render()},
     closecel(){const c=document.querySelector('.cel');if(c)c.remove()},
     rest(){S.rest.push(today());save();toast('Rest day logged. Recharge, Doctor.');render()},
@@ -513,7 +516,7 @@ async function syncData(){
 
 
 /* ---- Liquid Glass tab bar: floating pill, sliding glass lens, drag to switch ---- */
-const APP_VERSION='2026-11-03.2';
+const APP_VERSION='2026-11-03.3';
 const TABS=[['ward','today','Today'],['shift','focus','Focus'],['boss','exams','Exams'],['vault','wallet','Wallet']];
 let lastTab=null;
 function renderNav(){
@@ -558,6 +561,28 @@ function pageEnter(app,tab){
   n.addEventListener('pointerup',end);n.addEventListener('pointercancel',end);
   document.addEventListener('click',e=>{if(justDragged){e.stopPropagation();e.preventDefault();justDragged=false}},true);
 })();
+
+
+/* ---- Replay: Apple Music Replay-style story cards of your study ---- */
+function openReplay(){
+  const L=S.log||[],tot=L.reduce((a,x)=>a+(x.min||0),0),days={},zones={};
+  L.forEach(x=>{days[x.day]=(days[x.day]||0)+(x.min||0);zones[x.zone]=(zones[x.zone]||0)+(x.min||0)});
+  const bestDay=Object.entries(days).sort((a,b)=>b[1]-a[1])[0],topZ=Object.entries(zones).sort((a,b)=>b[1]-a[1])[0];
+  const nameOf=id=>{const b=S.bosses.find(q=>q.id===id);if(b)return short(b.name);const e=EXTRA_ZONES.find(q=>q.id===id);return e?short(e.name):'Study'};
+  const rated=L.filter(x=>x.rating);const avg=rated.length?rated.reduce((a,x)=>a+x.rating,0)/rated.length:0;
+  const r=rank(),n=L.length;
+  const cards=[
+    ['linear-gradient(160deg,#FF2D6F,#7A1FA2)','Your Replay','Resident Run',n?'Swipe through your study story.':'Finish your first patient to start your story.'],
+    ['linear-gradient(160deg,#14D8FF,#0A4DFF)','Focus time',hrs(tot)+' h',`${n} patient${n===1?'':'s'} treated`],
+    ['linear-gradient(160deg,#9DFF3A,#0B8A4A)','Top ward',topZ?esc(nameOf(topZ[0])):'None yet',topZ?hrs(topZ[1])+' h of your time':'Pick a ward and start'],
+    ['linear-gradient(160deg,#FF9F0A,#FF2D6F)','Best day',bestDay?hrs(bestDay[1])+' h':'None yet',bestDay?esc(fmtDate(bestDay[0])):''],
+    ['linear-gradient(160deg,#BF5AF2,#0A84FF)','Streak',S.streak+' days',`Best ever: ${S.best||0} days`],
+    ['linear-gradient(160deg,#30D158,#0A84FF)','Rank',esc(r.name),`${S.xp} XP${avg?' · recall average '+avg.toFixed(1)+' of 5':''}`]
+  ];
+  const el=document.createElement('div');el.className='rply';
+  el.innerHTML=`<button class="rplyx" data-act="closereplay" aria-label="Close">Close</button><div class="rplys">${cards.map((c,i)=>`<section style="background:${c[0]}"><small>${c[1]}</small><h2>${c[2]}</h2><p>${c[3]}</p><em>${i+1} / ${cards.length}</em></section>`).join('')}</div>`;
+  document.body.appendChild(el);document.body.style.overflow='hidden';
+}
 
 /* ---- boot ---- */
 mergeData(DEFAULT_DATA);
