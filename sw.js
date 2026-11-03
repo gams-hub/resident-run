@@ -1,4 +1,4 @@
-const C='resident-run-v3', FILES=['./','index.html','app.js','manifest.webmanifest','icon-180.png','icon-192.png','icon-512.png','favicon.svg','favicon-32.png','favicon.ico','data.json'];
+const C='resident-run-v4', FILES=['./','index.html','app.js','manifest.webmanifest','icon-180.png','icon-192.png','icon-512.png','favicon.svg','favicon-32.png','favicon.ico','data.json'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 // network first (so Claude's data.json / app updates show up), cache as offline fallback

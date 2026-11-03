@@ -1,13 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
 <defs>
-<radialGradient id="bg" cx="50%" cy="38%" r="80%"><stop offset="0" stop-color="#26262B"/><stop offset="1" stop-color="#000"/></radialGradient>
-<linearGradient id="g0" gradientUnits="userSpaceOnUse" x1="167" y1="167" x2="857" y2="857"><stop offset="0" stop-color="#FF2D6F"/><stop offset="1" stop-color="#FF7A9C"/></linearGradient><linearGradient id="g1" gradientUnits="userSpaceOnUse" x1="267" y1="267" x2="757" y2="757"><stop offset="0" stop-color="#9DFF3A"/><stop offset="1" stop-color="#D4FF7A"/></linearGradient><linearGradient id="g2" gradientUnits="userSpaceOnUse" x1="367" y1="367" x2="657" y2="657"><stop offset="0" stop-color="#14D8FF"/><stop offset="1" stop-color="#7BEBFF"/></linearGradient>
-<filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="14" result="b"/><feFlood flood-color="#fff" flood-opacity=".0"/><feMerge><feMergeNode in="SourceGraphic"/></feMerge></filter>
-</defs>
-<rect width="1024" height="1024" rx="230" fill="url(#bg)"/>
-<circle cx="512" cy="512" r="345" fill="none" stroke="#FF2D6F" stroke-opacity=".20" stroke-width="84"/>
-<circle cx="512" cy="512" r="345" fill="none" stroke="url(#g0)" stroke-width="84" stroke-linecap="round" stroke-dasharray="1734.2 2167.7" transform="rotate(-90 512 512)" filter="url(#glow)"/><circle cx="512" cy="512" r="245" fill="none" stroke="#9DFF3A" stroke-opacity=".20" stroke-width="84"/>
-<circle cx="512" cy="512" r="245" fill="none" stroke="url(#g1)" stroke-width="84" stroke-linecap="round" stroke-dasharray="1016.0 1539.4" transform="rotate(-90 512 512)" filter="url(#glow)"/><circle cx="512" cy="512" r="145" fill="none" stroke="#14D8FF" stroke-opacity=".20" stroke-width="84"/>
-<circle cx="512" cy="512" r="145" fill="none" stroke="url(#g2)" stroke-width="84" stroke-linecap="round" stroke-dasharray="820.0 911.1" transform="rotate(-90 512 512)" filter="url(#glow)"/>
-<path d="M 430 515 H 477 L 497 462 L 531 580 L 553 515 H 594" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1A2B7A"/><stop offset=".55" stop-color="#2B6BFF"/><stop offset="1" stop-color="#45D6E8"/></linearGradient>
+<radialGradient id="blobA" cx="25%" cy="20%" r="55%"><stop offset="0" stop-color="#B66BFF" stop-opacity=".75"/><stop offset="1" stop-color="#B66BFF" stop-opacity="0"/></radialGradient>
+<radialGradient id="blobB" cx="85%" cy="90%" r="50%"><stop offset="0" stop-color="#7CFFD0" stop-opacity=".6"/><stop offset="1" stop-color="#7CFFD0" stop-opacity="0"/></radialGradient>
+<linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".42"/><stop offset=".55" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-color="#fff" stop-opacity=".22"/></linearGradient>
+<linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".45" stop-color="#fff" stop-opacity=".12"/><stop offset=".7" stop-color="#fff" stop-opacity=".1"/><stop offset="1" stop-color="#fff" stop-opacity=".7"/></linearGradient>
+<radialGradient id="hl" cx="50%" cy="0%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur stdDeviation="26"/></filter>
+<clipPath id="orb"><circle cx="512" cy="512" r="290"/></clipPath>
+<clipPath id="rr"><rect width="1024" height="1024" rx="230"/></clipPath></defs>
+<g clip-path="url(#rr)">
+<rect width="1024" height="1024" fill="url(#bg)"/>
+<rect width="1024" height="1024" fill="url(#blobA)"/><rect width="1024" height="1024" fill="url(#blobB)"/>
+<circle cx="512" cy="560" r="285" fill="#0A1A5C" opacity=".45" filter="url(#sh)"/>
+<g fill="#FFD84D" opacity=".96"><polygon points="512.0,109.0 519.3,130.0 541.5,130.4 523.8,143.8 530.2,165.1 512.0,152.4 493.8,165.1 500.2,143.8 482.5,130.4 504.7,130.0"/><polygon points="698.0,158.8 705.3,179.8 727.5,180.3 709.8,193.7 716.2,214.9 698.0,202.2 679.8,214.9 686.2,193.7 668.5,180.3 690.7,179.8"/><polygon points="834.2,295.0 841.4,316.0 863.6,316.4 846.0,329.8 852.4,351.1 834.2,338.4 815.9,351.1 822.4,329.8 804.7,316.4 826.9,316.0"/><polygon points="884.0,481.0 891.3,502.0 913.5,502.4 895.8,515.8 902.2,537.1 884.0,524.4 865.8,537.1 872.2,515.8 854.5,502.4 876.7,502.0"/><polygon points="834.2,667.0 841.4,688.0 863.6,688.4 846.0,701.8 852.4,723.1 834.2,710.4 815.9,723.1 822.4,701.8 804.7,688.4 826.9,688.0"/><polygon points="698.0,803.2 705.3,824.1 727.5,824.6 709.8,838.0 716.2,859.2 698.0,846.6 679.8,859.2 686.2,838.0 668.5,824.6 690.7,824.1"/><polygon points="512.0,853.0 519.3,874.0 541.5,874.4 523.8,887.8 530.2,909.1 512.0,896.4 493.8,909.1 500.2,887.8 482.5,874.4 504.7,874.0"/><polygon points="326.0,803.2 333.3,824.1 355.5,824.6 337.8,838.0 344.2,859.2 326.0,846.6 307.8,859.2 314.2,838.0 296.5,824.6 318.7,824.1"/><polygon points="189.8,667.0 197.1,688.0 219.3,688.4 201.6,701.8 208.1,723.1 189.8,710.4 171.6,723.1 178.0,701.8 160.4,688.4 182.6,688.0"/><polygon points="140.0,481.0 147.3,502.0 169.5,502.4 151.8,515.8 158.2,537.1 140.0,524.4 121.8,537.1 128.2,515.8 110.5,502.4 132.7,502.0"/><polygon points="189.8,295.0 197.1,316.0 219.3,316.4 201.6,329.8 208.1,351.1 189.8,338.4 171.6,351.1 178.0,329.8 160.4,316.4 182.6,316.0"/><polygon points="326.0,158.8 333.3,179.8 355.5,180.3 337.8,193.7 344.2,214.9 326.0,202.2 307.8,214.9 314.2,193.7 296.5,180.3 318.7,179.8"/></g>
+<circle cx="512" cy="512" r="290" fill="url(#glass)"/>
+<g clip-path="url(#orb)"><ellipse cx="512" cy="300" rx="250" ry="140" fill="url(#hl)"/>
+<circle cx="512" cy="512" r="262" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="30"/></g>
+<circle cx="512" cy="512" r="289" fill="none" stroke="url(#rim)" stroke-width="7"/>
+<path d="M 360 520 H 440 L 474 436 L 542 628 L 580 520 H 664" fill="none" stroke="#fff" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+</g></svg>
