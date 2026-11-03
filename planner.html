@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FILTERS Planner</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%93%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --paper:#eef0e9; --ink:#20281f; --ink-soft:#4b5748; --line:#c7cdbc;
+    --teal:#2f6f5e; --teal-deep:#1e4a3e; --rust:#a8482f; --card:#f7f8f3;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+    --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top, 0px);
+    padding-bottom:env(safe-area-inset-bottom, 0px);
+  }
+  html{scroll-padding-top:calc(50px + env(safe-area-inset-top, 0px));}
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); line-height:1.5; padding-bottom:60px;}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#1b201a; --ink:#e8ece4; --ink-soft:#a9b3a1; --line:#3a4237;
+      --teal:#4fae91; --teal-deep:#2f6f5e; --rust:#d98a5a; --card:#242b21;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#1b201a; --ink:#e8ece4; --ink-soft:#a9b3a1; --line:#3a4237;
+    --teal:#4fae91; --teal-deep:#2f6f5e; --rust:#d98a5a; --card:#242b21;
+  }
+  .wrap{max-width:820px; margin:0 auto; padding:0 20px;}
+  nav{position:sticky; top:0; z-index:50; background:rgba(238,240,233,0.95); backdrop-filter:blur(6px); border-bottom:1px solid var(--line); padding-top:env(safe-area-inset-top, 0px);}
+  nav .wrap{display:flex; gap:2px; overflow-x:auto; padding:0 20px;}
+  nav button{background:none; border:none; cursor:pointer; font-family:var(--mono); font-size:12.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-soft); padding:14px 12px; border-bottom:2px solid transparent; white-space:nowrap;}
+  nav button.active{color:var(--teal-deep); border-bottom-color:var(--teal);}
+  header.hero{padding:40px 0 24px; border-bottom:1px solid var(--line);}
+  .eyebrow{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.12em; color:var(--rust);}
+  h1{font-family:var(--serif); font-size:36px; margin:8px 0 6px; font-weight:600;}
+  .sub{color:var(--ink-soft); font-size:15.5px; max-width:60ch;}
+  section{padding:34px 0; border-bottom:1px solid var(--line);}
+  h2{font-family:var(--serif); font-size:22px; margin:0 0 6px;}
+  .lede{color:var(--ink-soft); margin:0 0 18px; max-width:65ch; font-size:14.5px;}
+  .target-card{background:var(--teal-deep); color:#f4f6ef; padding:26px; margin-bottom:20px;}
+  .target-card .eyebrow2{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.1em; opacity:.8; margin-bottom:12px;}
+  .target-row{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  .target-row .n{font-family:var(--serif); font-size:32px; font-weight:700;}
+  .target-row .l{font-size:12.5px; opacity:.85; margin-top:2px;}
+  .target-note{margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.25); font-size:13px; opacity:.9;}
+  .countdown{font-family:var(--mono); font-size:14px; background:var(--card); border:1px solid var(--line); padding:12px 16px; display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;}
+  .countdown b{font-size:19px; color:var(--teal-deep);}
+  .stat-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:16px 0;}
+  .stat{background:var(--card); border:1px solid var(--line); padding:14px;}
+  .stat .n{font-family:var(--mono); font-size:22px; font-weight:600; color:var(--teal-deep);}
+  .stat .l{font-size:12px; color:var(--ink-soft); margin-top:3px;}
+  table{width:100%; border-collapse:collapse; font-size:13.5px; margin-bottom:20px;}
+  th{text-align:left; font-family:var(--mono); font-size:11px; text-transform:uppercase; color:var(--ink-soft); padding:7px 6px; border-bottom:1px solid var(--line);}
+  td{padding:8px 6px; border-bottom:1px solid var(--line);}
+  td.mono, th.mono{font-family:var(--mono);}
+  .phase{display:grid; grid-template-columns:50px 1fr; gap:14px; padding:16px 0; border-top:1px dashed var(--line);}
+  .phase:first-of-type{border-top:none;}
+  .phase .num{font-family:var(--serif); font-size:28px; color:var(--line); font-weight:700;}
+  .phase h3{margin:0 0 4px; font-size:16px;}
+  .phase .dates{font-family:var(--mono); font-size:12px; color:var(--rust); margin-bottom:6px;}
+  .phase p{margin:0; color:var(--ink-soft); font-size:14px;}
+  details{background:var(--card); border:1px solid var(--line); padding:14px 18px; margin-top:16px;}
+  summary{font-family:var(--mono); font-size:12.5px; text-transform:uppercase; letter-spacing:.03em; cursor:pointer; color:var(--teal-deep);}
+  .row{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0;}
+  label{display:block; font-size:12px; color:var(--ink-soft); margin-bottom:4px; font-family:var(--mono);}
+  input{width:100%; padding:8px 9px; border:1px solid var(--line); background:#fff; font-family:var(--mono); font-size:13.5px;}
+  .calc-out{margin-top:12px; padding-top:12px; border-top:1px solid var(--line);}
+  .out-line{display:flex; justify-content:space-between; padding:5px 0; font-size:13.5px;}
+  .out-line b{font-family:var(--mono); color:var(--teal-deep);}
+  .flag{margin-top:10px; padding:10px 12px; font-size:13px;}
+  .flag.warn{background:#fbe9d9; border:1px solid #c07a2e; color:#6e4213;}
+  .flag.ok{background:#e2f0ea; border:1px solid var(--teal); color:var(--teal-deep);}
+  .filters-tabs{display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;}
+  .ftab{font-family:var(--mono); font-size:11.5px; text-transform:uppercase; padding:6px 11px; border:1px solid var(--line); background:var(--card); cursor:pointer; color:var(--ink-soft);}
+  .ftab.active{background:var(--teal-deep); color:#fff; border-color:var(--teal-deep);}
+  tr.p1 td:first-child{border-left:3px solid #c07a2e;}
+  tr.p2 td:first-child{border-left:3px solid var(--teal);}
+  tr.p3 td:first-child{border-left:3px solid var(--rust);}
+  input[type=checkbox]{width:15px; height:15px; accent-color:var(--teal-deep);}
+  tfoot td{font-family:var(--mono); font-weight:700; border-bottom:none;}
+  footer{padding:24px 0; text-align:center; color:var(--ink-soft); font-size:12px; font-family:var(--mono);}
+  @media (max-width:600px){.row{grid-template-columns:1fr;} h1{font-size:28px;} .target-row{grid-template-columns:1fr;}}
+
+  /* daily checklist */
+  .daily-check{background:var(--card); border:1px solid var(--line); padding:22px; margin-top:20px;}
+  .dc-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px;}
+  .dc-head h3{font-family:var(--serif); font-size:18px; margin:0;}
+  .dc-reset{background:none; border:none; font-family:var(--mono); font-size:11px; color:var(--ink-soft); text-transform:uppercase; cursor:pointer; text-decoration:underline;}
+  .progress-outer{height:14px; background:var(--paper); border:1px solid var(--line); overflow:hidden; margin-bottom:6px;}
+  .progress-inner{height:100%; width:0%; background:linear-gradient(90deg, var(--teal), var(--teal-deep)); transition:width .5s cubic-bezier(.4,1.4,.6,1);}
+  .progress-pct{font-family:var(--mono); font-size:12px; color:var(--ink-soft); margin-bottom:14px;}
+  .mascot-row{display:flex; align-items:center; gap:10px; margin-bottom:16px; min-height:34px;}
+  .mascot-emoji{font-size:26px; display:inline-block; transition:transform .3s;}
+  .mascot-emoji.bump{animation:bump .4s ease;}
+  @keyframes bump{0%{transform:scale(1);}40%{transform:scale(1.35) rotate(-8deg);}100%{transform:scale(1);}}
+  .mascot-msg{font-size:13.5px; color:var(--ink-soft); font-style:italic;}
+  .dc-list{list-style:none; margin:0; padding:0;}
+  .dc-list li{display:flex; align-items:center; gap:10px; padding:9px 0; border-top:1px dashed var(--line); font-size:14.5px; transition:opacity .3s;}
+  .dc-list li:first-child{border-top:none;}
+  .dc-list li.done{opacity:.55;}
+  .dc-list li.done span.dc-label{text-decoration:line-through;}
+  .dc-list input[type=checkbox]{width:18px; height:18px; accent-color:var(--teal-deep); cursor:pointer; flex-shrink:0;}
+  .dc-list span.dc-emoji{width:20px; text-align:center; transition:transform .3s;}
+  .dc-list li.done span.dc-emoji{transform:scale(1.3) rotate(-10deg);}
+  .confetti{position:fixed; top:-20px; font-size:20px; pointer-events:none; animation:fall linear forwards; z-index:99;}
+  @keyframes fall{to{transform:translateY(110vh) rotate(360deg); opacity:0;}}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <button data-tab="overview" class="active">Today</button>
+  <button data-tab="timeline">Timeline</button>
+  <button data-tab="checklist">Checklist</button>
+</div></nav>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Sem 1–5 · Preclinical / Clinical Border</div>
+  <h1>FILTERS</h1>
+  <p class="sub">One number to hit today, synced to your real timetable. BMSE (12–13 Feb 2027) is the exam.</p>
+</header>
+
+<section id="overview">
+  <div class="target-card">
+    <div class="eyebrow2">Your daily target — starting 23 Sept</div>
+    <div class="target-row">
+      <div><div class="n">~5</div><div class="l">BNB videos/day</div></div>
+      <div><div class="n">~7</div><div class="l">First Aid pages/day (3 deep + 4 quick)</div></div>
+      <div><div class="n">~3.0</div><div class="l">hrs/day, FILTERS only</div></div>
+    </div>
+    <div class="target-note">Full day: class ~4.5h + self-study of current module 2h + German 3h + transport 0.5h + FILTERS 3.0h + sleep 7.5h = ~20.5h — leaves ~3.5h for self-care. Sundays, the 5 marked holidays, and 22 Jan (fully free) are rest days.</div>
+  </div>
+
+  <div class="daily-check">
+    <div class="dc-head">
+      <h3>Today's checklist</h3>
+      <button class="dc-reset" id="dcReset">Reset</button>
+    </div>
+    <div class="progress-outer"><div class="progress-inner" id="dcProgress"></div></div>
+    <div class="progress-pct" id="dcPct">0% of today done</div>
+    <div class="mascot-row">
+      <span class="mascot-emoji" id="mascotEmoji">🔵</span>
+      <span class="mascot-msg" id="mascotMsg">Doraemon's pocket is open — pull out whatever gadget gets you started. First checkbox is the hardest one.</span>
+    </div>
+    <ul class="dc-list" id="dcList">
+      <li data-task="videos"><input type="checkbox" id="t-videos"><span class="dc-emoji">🎬</span><span class="dc-label">~5 BNB videos</span></li>
+      <li data-task="fa"><input type="checkbox" id="t-fa"><span class="dc-emoji">📖</span><span class="dc-label">~7 First Aid pages (3 deep + 4 quick)</span></li>
+      <li data-task="german"><input type="checkbox" id="t-german"><span class="dc-emoji">🇩🇪</span><span class="dc-label">3h German</span></li>
+      <li data-task="selfstudy"><input type="checkbox" id="t-selfstudy"><span class="dc-emoji">📚</span><span class="dc-label">2h self-study, current module</span></li>
+      <li data-task="uni"><input type="checkbox" id="t-uni"><span class="dc-emoji">🏫</span><span class="dc-label">Uni classes attended</span></li>
+      <li data-task="selfcare"><input type="checkbox" id="t-selfcare"><span class="dc-emoji">🌿</span><span class="dc-label">Self-care / rest today</span></li>
+    </ul>
+  </div>
+
+  <div class="countdown">
+    <span>Days to BMSE (12 Feb 2027)</span>
+    <b id="cdNum">—</b>
+  </div>
+
+  <p class="lede">This covers all 20 BNB blocks (122.1 hrs) + First Aid p.27–738 (712 pages) across <b>100 real study days</b> between 23 Sept and 21 Jan, plus a short 3-day tail (23–25 Jan) to finish Reproductive before its quiz — pulled from your actual schedule. The number went up from the last version because 13 days were lost to the recent emergency and 22 Jan is now fully protected — same content, fewer days.</p>
+
+  <details>
+    <summary>Adjust the numbers</summary>
+    <div class="row">
+      <div><label>Exam date</label><input type="date" id="examDate" value="2027-02-12"></div>
+      <div><label>Your daily FILTERS budget (hrs)</label><input type="number" id="dailyBudget" value="3.0" step="0.1"></div>
+    </div>
+    <div class="row">
+      <div><label>Remaining video hours</label><input type="number" id="remVideo" value="122.1" step="0.1"></div>
+      <div><label>Remaining First Aid pages</label><input type="number" id="remPages" value="712"></div>
+    </div>
+    <div class="calc-out">
+      <div class="out-line"><span>Days available</span><b id="outDaysAvail">—</b></div>
+      <div class="out-line"><span>Days needed at your budget</span><b id="outDaysNeeded">—</b></div>
+    </div>
+    <div class="flag" id="calcFlag"></div>
+  </details>
+</section>
+
+<section id="timeline">
+  <h2>Two phases</h2>
+  <table>
+    <thead><tr><th>Date</th><th>What's happening</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">23 Sep 2026</td><td>FILTERS prep restarts</td></tr>
+      <tr><td class="mono">10 Nov 2026</td><td>Q3 ES — Endocrine quiz</td></tr>
+      <tr><td class="mono">19 Dec 2026</td><td>Q1 US — Urinary quiz</td></tr>
+      <tr><td class="mono">21 Jan 2027</td><td>First-pass content ends</td></tr>
+      <tr><td class="mono"><b>22 Jan 2027</b></td><td><b>Fully free — no FILTERS, no German push</b></td></tr>
+      <tr><td class="mono">23–25 Jan 2027</td><td>Finish Reproductive tail before its quiz</td></tr>
+      <tr><td class="mono">26 Jan 2027</td><td>Q2 RPS — Reproductive quiz</td></tr>
+      <tr><td class="mono">30 Jan – 6 Feb</td><td>Topo Anatomy exam + US/RPS/ES re-exams</td></tr>
+      <tr><td class="mono"><b>12–13 Feb 2027</b></td><td><b>BMSE Part I & II — this is FILTERS</b></td></tr>
+      <tr><td class="mono">1 Mar 2027</td><td>Clinical Medicine (VI sem) begins</td></tr>
+    </tbody>
+  </table>
+
+  <div class="phase">
+    <div class="num">01</div>
+    <div>
+      <h3>First Pass</h3>
+      <div class="dates">23 Sept 2026 – 21 Jan 2027 · 100 real study days, + 3-day tail to 25 Jan</div>
+      <p>All 20 BNB blocks + First Aid, once, running together — Endocrine's own video/page load is light enough (~6.5 of 122 hrs) to not need a separate dedicated phase; your 2h/day module self-study carries the heavy Endocrine lifting. Foundations first (Biochem, Cell Bio, Genetics, Immunology, Pathology, Behavioral, Basic Pharm, Biostats/Epi, Dermatology), then the rest. Endocrine/Urinary/Reproductive each finish just before their real quiz date above. 22 Jan is untouched — full rest.</p>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="num">02</div>
+    <div>
+      <h3>Final Sprint</h3>
+      <div class="dates">26 Jan – 11 Feb 2027 · 17 days</div>
+      <p>No new content. First half overlaps quiz re-exams — let those double as review. Second half (7–11 Feb): fast First Aid skim + BNB re-watch only for weak spots your practice questions expose + timed practice.</p>
+    </div>
+  </div>
+</section>
+
+<section id="checklist">
+  <h2>Subject checklist</h2>
+  <p class="lede">Amber = foundations, teal = organ systems, rust = synced to real quiz dates.</p>
+  <div class="filters-tabs">
+    <div class="ftab active" data-filter="all">All</div>
+    <div class="ftab" data-filter="1">Foundations</div>
+    <div class="ftab" data-filter="2">Organ systems</div>
+    <div class="ftab" data-filter="3">Synced</div>
+  </div>
+  <table>
+    <thead><tr><th>Done</th><th>Subject</th><th class="mono">Length</th><th class="mono">Target</th></tr></thead>
+    <tbody id="subjBody"></tbody>
+    <tfoot><tr><td></td><td>Total</td><td class="mono" id="subjTotal"></td><td></td></tr></tfoot>
+  </table>
+</section>
+
+<footer>FILTERS planner — synced to Schedule_2026-2027_Fall_Rustavi.xlsx and the DTMU e-PBL program doc.</footer>
+</div>
+
+<script>
+const subjects = [
+  {name:"Basic Pharmacology", min:86, phase:1, target:""},
+  {name:"Behavioral Science", min:86, phase:1, target:""},
+  {name:"Biochemistry", min:544, phase:1, target:""},
+  {name:"Biostats/Epi", min:172, phase:1, target:""},
+  {name:"Cell Biology", min:200, phase:1, target:""},
+  {name:"Dermatology", min:151, phase:1, target:""},
+  {name:"Genetics", min:146, phase:1, target:""},
+  {name:"Immunology", min:317, phase:1, target:""},
+  {name:"Pathology", min:182, phase:1, target:""},
+  {name:"Cardiology", min:776, phase:2, target:""},
+  {name:"Gastroenterology", min:529, phase:2, target:""},
+  {name:"Hematology", min:494, phase:2, target:""},
+  {name:"Infectious Disease", min:693, phase:2, target:""},
+  {name:"Musculoskeletal", min:338, phase:2, target:""},
+  {name:"Neurology", min:638, phase:2, target:""},
+  {name:"Pulmonary", min:373, phase:2, target:""},
+  {name:"Psychiatry", min:284, phase:2, target:""},
+  {name:"Endocrinology", min:387, phase:3, target:"by 9 Nov"},
+  {name:"Renal / Urinary", min:491, phase:3, target:"by 18 Dec"},
+  {name:"Reproductive", min:435, phase:3, target:"by 25 Jan"},
+];
+
+function fmtMin(min){ const h=Math.floor(min/60), m=Math.round(min%60); return h>0?`${h}h ${m}m`:`${m}m`; }
+
+const sections = ["overview","timeline","checklist"];
+const navBtns = document.querySelectorAll("nav button");
+navBtns.forEach(btn=>btn.addEventListener("click", ()=>{
+  document.getElementById(btn.dataset.tab).scrollIntoView({behavior:"smooth", block:"start"});
+}));
+window.addEventListener("scroll", ()=>{
+  let current = sections[0];
+  for(const id of sections){
+    if(document.getElementById(id).getBoundingClientRect().top < 120) current = id;
+  }
+  navBtns.forEach(b=>b.classList.toggle("active", b.dataset.tab===current));
+});
+
+const tbody = document.getElementById("subjBody");
+const phaseClass = {1:"p1",2:"p2",3:"p3"};
+function renderTable(filter){
+  tbody.innerHTML = "";
+  let totalMin = 0;
+  subjects.forEach((s,i)=>{
+    if(filter!=="all" && String(s.phase)!==filter) return;
+    totalMin += s.min;
+    const tr = document.createElement("tr");
+    tr.className = phaseClass[s.phase];
+    tr.innerHTML = `<td><input type="checkbox" id="chk${i}"></td><td>${s.name}</td><td class="mono">${fmtMin(s.min)}</td><td class="mono">${s.target||"—"}</td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById("subjTotal").textContent = fmtMin(totalMin) + " (" + (totalMin/60).toFixed(1) + " hrs)";
+}
+renderTable("all");
+document.querySelectorAll(".ftab").forEach(t=>t.addEventListener("click", ()=>{
+  document.querySelectorAll(".ftab").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");
+  renderTable(t.dataset.filter);
+}));
+
+function daysBetween(a,b){ return Math.ceil((b-a)/(1000*60*60*24)); }
+const today = new Date();
+function updateCountdown(){
+  const exam = new Date(document.getElementById("examDate").value + "T00:00:00");
+  const d = daysBetween(today, exam);
+  document.getElementById("cdNum").textContent = d > 0 ? d + " days" : "date has passed";
+}
+
+function runCalc(){
+  const exam = new Date(document.getElementById("examDate").value + "T00:00:00");
+  const daysLeft = Math.max(0, daysBetween(today, exam));
+  const dailyBudgetHrs = parseFloat(document.getElementById("dailyBudget").value) || 0;
+  const remVideoHrs = parseFloat(document.getElementById("remVideo").value) || 0;
+  const remPages = parseFloat(document.getElementById("remPages").value) || 0;
+
+  const videoEffMin = remVideoHrs*60*1.5;
+  const faEffMin = remPages*0.4*17.5 + remPages*0.6*5;
+  const totalEffMin = videoEffMin + faEffMin;
+  const daysNeeded = dailyBudgetHrs>0 ? totalEffMin/(dailyBudgetHrs*60) : Infinity;
+
+  document.getElementById("outDaysAvail").textContent = daysLeft + " days";
+  document.getElementById("outDaysNeeded").textContent = isFinite(daysNeeded) ? Math.ceil(daysNeeded) + " days" : "—";
+
+  const flag = document.getElementById("calcFlag");
+  if(daysLeft<=0){
+    flag.className="flag warn"; flag.textContent="Set a real exam date.";
+  } else if(daysNeeded>daysLeft){
+    flag.className="flag warn";
+    flag.textContent = `Short by ~${Math.ceil(daysNeeded-daysLeft)} days at this budget — raise daily hours slightly or trim First Aid deep-read %.`;
+  } else {
+    flag.className="flag ok";
+    flag.textContent = "Fits inside your available days — you have some slack.";
+  }
+  updateCountdown();
+}
+["examDate","dailyBudget","remVideo","remPages"].forEach(id=>document.getElementById(id).addEventListener("input", runCalc));
+runCalc();
+
+// daily checklist — progress, mascot, confetti
+const dcTasks = ["videos","fa","german","selfstudy","uni","selfcare"];
+const mascots = [
+  {min:0,  emoji:"🔵", msg:"Doraemon's pocket is open — pull out whatever gadget gets you started. First checkbox is the hardest one."},
+  {min:1,  emoji:"😅", msg:"Nobita energy: one done, five to go. That's still real progress, not nothing."},
+  {min:34, emoji:"💪", msg:"Gian-level momentum now — loud and proud, keep going."},
+  {min:50, emoji:"😌", msg:"Shizuka-calm halfway point. Steady pace beats a sprint that burns out."},
+  {min:67, emoji:"😎", msg:"Suneo would be bragging by now. You've earned a little of that too."},
+  {min:84, emoji:"🤩", msg:"Almost the full set — this is the good kind of tired."},
+  {min:100,emoji:"🎉", msg:"Everything's checked. That's a real day banked toward 12 Feb — go rest, properly."}
+];
+function currentMascot(pct){
+  let m = mascots[0];
+  for(const x of mascots){ if(pct>=x.min) m = x; }
+  return m;
+}
+function spawnConfetti(){
+  const emojis = ["🎉","✨","🔵","📘","🎊"];
+  for(let i=0;i<18;i++){
+    const el = document.createElement("span");
+    el.className = "confetti";
+    el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    el.style.left = Math.random()*100+"vw";
+    el.style.fontSize = (14+Math.random()*14)+"px";
+    el.style.animationDuration = (1.6+Math.random()*1.2)+"s";
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 3000);
+  }
+}
+function updateDailyCheck(){
+  const checked = dcTasks.filter(t=>document.getElementById("t-"+t).checked);
+  const pct = Math.round((checked.length/dcTasks.length)*100);
+  document.getElementById("dcProgress").style.width = pct+"%";
+  document.getElementById("dcPct").textContent = pct+"% of today done";
+  const m = currentMascot(pct);
+  const emojiEl = document.getElementById("mascotEmoji");
+  emojiEl.textContent = m.emoji;
+  emojiEl.classList.remove("bump"); void emojiEl.offsetWidth; emojiEl.classList.add("bump");
+  document.getElementById("mascotMsg").textContent = m.msg;
+  dcTasks.forEach(t=>{
+    const li = document.querySelector(`li[data-task="${t}"]`);
+    li.classList.toggle("done", document.getElementById("t-"+t).checked);
+  });
+  if(pct===100) spawnConfetti();
+}
+dcTasks.forEach(t=>document.getElementById("t-"+t).addEventListener("change", updateDailyCheck));
+document.getElementById("dcReset").addEventListener("click", ()=>{
+  dcTasks.forEach(t=>document.getElementById("t-"+t).checked=false);
+  updateDailyCheck();
+});
+updateDailyCheck();
+</script>
+</body>
+</html>

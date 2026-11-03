@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+<defs>
+<radialGradient id="bg" cx="50%" cy="38%" r="80%"><stop offset="0" stop-color="#26262B"/><stop offset="1" stop-color="#000"/></radialGradient>
+<linearGradient id="g0" gradientUnits="userSpaceOnUse" x1="167" y1="167" x2="857" y2="857"><stop offset="0" stop-color="#FF2D6F"/><stop offset="1" stop-color="#FF7A9C"/></linearGradient><linearGradient id="g1" gradientUnits="userSpaceOnUse" x1="267" y1="267" x2="757" y2="757"><stop offset="0" stop-color="#9DFF3A"/><stop offset="1" stop-color="#D4FF7A"/></linearGradient><linearGradient id="g2" gradientUnits="userSpaceOnUse" x1="367" y1="367" x2="657" y2="657"><stop offset="0" stop-color="#14D8FF"/><stop offset="1" stop-color="#7BEBFF"/></linearGradient>
+<filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="14" result="b"/><feFlood flood-color="#fff" flood-opacity=".0"/><feMerge><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="1024" height="1024" rx="230" fill="url(#bg)"/>
+<circle cx="512" cy="512" r="345" fill="none" stroke="#FF2D6F" stroke-opacity=".20" stroke-width="84"/>
+<circle cx="512" cy="512" r="345" fill="none" stroke="url(#g0)" stroke-width="84" stroke-linecap="round" stroke-dasharray="1734.2 2167.7" transform="rotate(-90 512 512)" filter="url(#glow)"/><circle cx="512" cy="512" r="245" fill="none" stroke="#9DFF3A" stroke-opacity=".20" stroke-width="84"/>
+<circle cx="512" cy="512" r="245" fill="none" stroke="url(#g1)" stroke-width="84" stroke-linecap="round" stroke-dasharray="1016.0 1539.4" transform="rotate(-90 512 512)" filter="url(#glow)"/><circle cx="512" cy="512" r="145" fill="none" stroke="#14D8FF" stroke-opacity=".20" stroke-width="84"/>
+<circle cx="512" cy="512" r="145" fill="none" stroke="url(#g2)" stroke-width="84" stroke-linecap="round" stroke-dasharray="820.0 911.1" transform="rotate(-90 512 512)" filter="url(#glow)"/>
+<path d="M 430 515 H 477 L 497 462 L 531 580 L 553 515 H 594" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,260 @@
+{
+  "_help": "Edited by Claude on request. Merged into your saved progress on load: existing ids are updated (XP, hours and scores kept), new ids added, ids in 'remove' deleted. dailyTargets = hours per day per ward.",
+  "bosses": [
+    {
+      "id": "b-endo",
+      "name": "Endocrine Quiz",
+      "icon": "🦋",
+      "date": "2026-11-10",
+      "targetHrs": 21,
+      "targetScore": 80
+    },
+    {
+      "id": "b-research",
+      "name": "Research Submission",
+      "icon": "📄",
+      "date": "2026-11-11",
+      "targetHrs": 16,
+      "targetScore": 100,
+      "kind": "submit"
+    },
+    {
+      "id": "b-renal",
+      "name": "Urinary Quiz",
+      "icon": "💧",
+      "date": "2026-12-19",
+      "targetHrs": 20,
+      "targetScore": 80
+    },
+    {
+      "id": "b-rps",
+      "name": "Reproductive Quiz",
+      "icon": "🧬",
+      "date": "2027-01-26",
+      "targetHrs": 20,
+      "targetScore": 80
+    },
+    {
+      "id": "b-bmse",
+      "name": "BMSE — FINAL BOSS",
+      "icon": "👹",
+      "date": "2027-02-12",
+      "targetHrs": 166,
+      "targetScore": 70
+    }
+  ],
+  "rewards": [
+    {
+      "id": "r-vpn",
+      "icon": "🔐",
+      "name": "The VPN",
+      "tier": "rare",
+      "bossId": "b-endo",
+      "hrs": 18,
+      "score": 80,
+      "weekly": 0,
+      "daily": 0
+    },
+    {
+      "id": "r-atv",
+      "icon": "📺",
+      "name": "Apple TV box",
+      "tier": "legendary",
+      "bossId": "b-bmse",
+      "hrs": 150,
+      "score": 70,
+      "weekly": 0,
+      "daily": 0
+    },
+    {
+      "id": "r-coffee",
+      "icon": "☕",
+      "name": "Favourite coffee trip",
+      "tier": "common",
+      "bossId": null,
+      "hrs": 0,
+      "score": 0,
+      "weekly": 10,
+      "daily": 0
+    },
+    {
+      "id": "r-night",
+      "icon": "🎮",
+      "name": "Guilt-free show / game night",
+      "tier": "common",
+      "bossId": null,
+      "hrs": 0,
+      "score": 0,
+      "weekly": 0,
+      "daily": 5
+    }
+  ],
+  "rotations": [],
+  "cards": [],
+  "remove": [
+    "c-de1",
+    "c-de10",
+    "c-de11",
+    "c-de12",
+    "c-de2",
+    "c-de3",
+    "c-de4",
+    "c-de5",
+    "c-de6",
+    "c-de7",
+    "c-de8",
+    "c-de9",
+    "c-seed0",
+    "c-seed1",
+    "c-seed2",
+    "c-seed3",
+    "c-seed4",
+    "c-seed5",
+    "c-seed6",
+    "c-seed7",
+    "c-seed8",
+    "c-seed9"
+  ],
+  "dailyTargets": [
+    {
+      "zone": "b-endo",
+      "hrs": 3,
+      "until": "2026-11-09"
+    },
+    {
+      "zone": "b-research",
+      "hrs": 2,
+      "until": "2026-11-10"
+    },
+    {
+      "zone": "z-german",
+      "dates": {
+        "2026-11-03": 3,
+        "2026-11-04": 2,
+        "2026-11-05": 3,
+        "2026-11-06": 2,
+        "2026-11-07": 2,
+        "2026-11-08": 2,
+        "2026-11-09": 0.75,
+        "2026-11-10": 0.3,
+        "2026-11-12": 3,
+        "2026-11-13": 3,
+        "2026-11-14": 3,
+        "2026-11-15": 1.5,
+        "2026-11-16": 3,
+        "2026-11-17": 3,
+        "2026-11-18": 3,
+        "2026-11-19": 2,
+        "2026-11-20": 3,
+        "2026-11-21": 3,
+        "2026-11-22": 1.5,
+        "2026-11-23": 3,
+        "2026-11-24": 3,
+        "2026-11-25": 3,
+        "2026-11-26": 3,
+        "2026-11-27": 3,
+        "2026-11-28": 3,
+        "2026-11-30": 3,
+        "2026-12-01": 3,
+        "2026-12-02": 2,
+        "2026-12-03": 3,
+        "2026-12-04": 3,
+        "2026-12-05": 3,
+        "2026-12-07": 3,
+        "2026-12-08": 3,
+        "2026-12-09": 3,
+        "2026-12-10": 3,
+        "2026-12-11": 3,
+        "2026-12-12": 3,
+        "2026-12-13": 1.5,
+        "2026-12-14": 2,
+        "2026-12-15": 3,
+        "2026-12-16": 3,
+        "2026-12-17": 3,
+        "2026-12-18": 3,
+        "2026-12-19": 3,
+        "2026-12-21": 3,
+        "2026-12-22": 3,
+        "2026-12-23": 2,
+        "2026-12-24": 3,
+        "2026-12-25": 3,
+        "2026-12-26": 3,
+        "2026-12-27": 1.5,
+        "2026-12-28": 3,
+        "2026-12-29": 3,
+        "2026-12-30": 3,
+        "2026-12-31": 3,
+        "2027-01-01": 3,
+        "2027-01-02": 3,
+        "2027-01-04": 3,
+        "2027-01-05": 2,
+        "2027-01-06": 3,
+        "2027-01-07": 3,
+        "2027-01-08": 3,
+        "2027-01-09": 3,
+        "2027-01-10": 1.5,
+        "2027-01-11": 3,
+        "2027-01-12": 3,
+        "2027-01-13": 3,
+        "2027-01-14": 3,
+        "2027-01-15": 2,
+        "2027-01-16": 3,
+        "2027-01-17": 1.5,
+        "2027-01-18": 3,
+        "2027-01-19": 3,
+        "2027-01-20": 3,
+        "2027-01-21": 3,
+        "2027-01-23": 3,
+        "2027-01-24": 1.5,
+        "2027-01-25": 3,
+        "2027-01-26": 3,
+        "2027-01-27": 3,
+        "2027-01-28": 3,
+        "2027-01-29": 3,
+        "2027-01-30": 3,
+        "2027-01-31": 1.5
+      }
+    },
+    {
+      "zone": "z-filters",
+      "hrs": 1,
+      "until": "2026-11-11"
+    },
+    {
+      "zone": "z-filters",
+      "hrs": 2,
+      "from": "2026-11-12",
+      "until": "2027-02-11"
+    }
+  ],
+  "journey": {
+    "zone": "z-german",
+    "name": "Reise nach München",
+    "stops": [
+      {
+        "name": "Berlin Hbf",
+        "hrs": 0
+      },
+      {
+        "name": "Hannover Hbf",
+        "hrs": 20
+      },
+      {
+        "name": "Köln Hbf",
+        "hrs": 56
+      },
+      {
+        "name": "Frankfurt Hbf",
+        "hrs": 106
+      },
+      {
+        "name": "Stuttgart Hbf",
+        "hrs": 162
+      },
+      {
+        "name": "München Hbf",
+        "hrs": 225
+      }
+    ]
+  }
+}
