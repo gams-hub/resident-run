@@ -211,8 +211,8 @@ function vToday(){
       <div class="soft small" style="margin-top:6px">${nxt?`Nächster Halt in ${(nxt.hrs-jm).toFixed(1)} h of German`:'Willkommen in München'}</div></div></section>`}
   h+=`<div class="eyebrow-s">Last 7 days</div><section class="list"><div class="bars">${week.map((w,i)=>`<div class="${i===6?'td':''}"><i style="height:${Math.max(4,w.n/mx*56)}px"></i>${w.lab}</div>`).join('')}</div><div style="height:12px"></div></section>`;
   h+=`<button class="rcard" data-act="replay"><span>Replay</span><b>Your study story so far</b><i>Open</i></button>`;
-  h+=`<div class="eyebrow-s">Connected to Claude</div><section class="list">
-    <div class="item"><div class="row sp"><div class="row"><span class="dot"></span><div><div>Linked to GitHub</div><div class="soft small">gams-hub/resident-run</div></div></div><a class="tb" href="https://github.com/gams-hub/resident-run" target="_blank" rel="noopener noreferrer">Open</a></div></div>
+  h+=`<div class="eyebrow-s">Managed by Claude</div><section class="list">
+    <div class="item"><div class="row sp"><div class="row"><span class="dot"></span><div><div>Updated through GitHub</div><div class="soft small">gams-hub/resident-run</div></div></div><a class="tb" href="https://github.com/gams-hub/resident-run" target="_blank" rel="noopener noreferrer">Open</a></div></div>
     <div class="item row sp"><div><div>App version</div><div class="soft small">${esc(APP_VERSION)} · ${SYNC_AT?'synced '+esc(new Date(SYNC_AT).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})):'not synced yet'}</div></div><button class="tb" data-act="checkupdate">Check for updates</button></div>
     <div class="item soft small">Ask Claude to change exams, rewards, your schedule or the app's own code. Changes ship through GitHub, and this app picks them up automatically whenever you open it. Your progress stays on this phone.</div></section>
   <div class="eyebrow-s">Settings</div><section class="list">
@@ -525,7 +525,7 @@ async function syncData(){
 
 
 /* ---- Liquid Glass tab bar: floating pill, sliding glass lens, drag to switch ---- */
-const APP_VERSION='2026-11-03.4';
+const APP_VERSION='2026-11-03.5';
 const TABS=[['ward','today','Today'],['shift','focus','Focus'],['boss','exams','Exams'],['vault','wallet','Wallet']];
 let lastTab=null;
 function renderNav(){
