@@ -114,7 +114,7 @@ function rollDays(){
   const t=today(),notes=[];const wk=mondayOf(t);
   if(S.shieldWeek!==wk){S.shieldWeek=wk;if(S.shields<1){S.shields=1;notes.push('New week, new free shield.')}}
   if(!S.checked)S.checked=addDays(t,-1);
-  const had=new Set(S.log.map(l=>l.day));
+  const had=new Set(S.log.filter(l=>!l.adj).map(l=>l.day));
   for(let d=addDays(S.checked,1);d<t;d=addDays(d,1)){
     if(had.has(d))continue;
     if(parse(d).getDay()===0||S.rest.includes(d))continue;
@@ -127,8 +127,8 @@ function rollDays(){
 rollDays();
 
 /* ---------- stats ---------- */
-const blocksOn=d=>S.log.filter(l=>l.day===d).length;
-const blocksWeek=()=>{const m=mondayOf(today());return S.log.filter(l=>l.day>=m).length};
+const blocksOn=d=>S.log.filter(l=>l.day===d&&!l.adj).length;
+const blocksWeek=()=>{const m=mondayOf(today());return S.log.filter(l=>l.day>=m&&!l.adj).length};
 function rank(){const i=rankIdx(S.xp),nx=RANKS[i+1];return{i,name:RANKS[i][1],cur:RANKS[i][0],next:nx?nx[0]:null}}
 function nextBoss(){const t=today();return S.bosses.filter(b=>!b.defeated&&b.date>=t).sort((a,b)=>a.date<b.date?-1:1)[0]||null}
 const bossPct=b=>clamp(b.min/60/b.targetHrs*100,0,100);
@@ -502,6 +502,15 @@ function mergeData(d){
     else S.bosses.push({min:0,score:null,defeated:false,icon:'',targetHrs:8,targetScore:80,...n})});
   (d.rewards||[]).forEach(n=>{if(!n||!n.id||rm.has(n.id))return;const o=S.rewards.find(r=>r.id===n.id);
     if(o)Object.assign(o,n);else S.rewards.push({tier:'common',bossId:null,hrs:0,score:0,weekly:0,daily:0,claimed:null,...n})});
+  /* adjustments: hours/XP added by Claude from chat. Each id is applied once; putting its id in 'remove' reverses it. */
+  S.adjApplied=Array.isArray(S.adjApplied)?S.adjApplied:[];
+  S.log=S.log.filter(l=>{if(l.adjId&&rm.has(l.adjId)){S.xp=Math.max(0,S.xp-(l.xp||0));S.adjApplied=S.adjApplied.filter(i=>i!==l.adjId);return false}return true});
+  (Array.isArray(d.adjustments)?d.adjustments:[]).forEach(a=>{
+    if(!a||typeof a.id!=='string'||rm.has(a.id)||S.adjApplied.includes(a.id))return;
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(a.day||'')||typeof a.zone!=='string'||!Number.isFinite(a.min)||Math.abs(a.min)>1440)return;
+    const xp=Number.isFinite(a.xp)?Math.min(2000,Math.max(0,a.xp)):0;
+    S.log.push({t:Date.now(),day:a.day,zone:a.zone,topic:String(a.note||'Added by Claude').slice(0,80),min:a.min,xp,dist:0,rating:null,adj:true,adjId:a.id});
+    S.xp+=xp;S.adjApplied.push(a.id)});
   save();
 }
 let SYNC_AT=0;
@@ -516,7 +525,7 @@ async function syncData(){
 
 
 /* ---- Liquid Glass tab bar: floating pill, sliding glass lens, drag to switch ---- */
-const APP_VERSION='2026-11-03.3';
+const APP_VERSION='2026-11-03.4';
 const TABS=[['ward','today','Today'],['shift','focus','Focus'],['boss','exams','Exams'],['vault','wallet','Wallet']];
 let lastTab=null;
 function renderNav(){
@@ -570,7 +579,7 @@ function openReplay(){
   const bestDay=Object.entries(days).sort((a,b)=>b[1]-a[1])[0],topZ=Object.entries(zones).sort((a,b)=>b[1]-a[1])[0];
   const nameOf=id=>{const b=S.bosses.find(q=>q.id===id);if(b)return short(b.name);const e=EXTRA_ZONES.find(q=>q.id===id);return e?short(e.name):'Study'};
   const rated=L.filter(x=>x.rating);const avg=rated.length?rated.reduce((a,x)=>a+x.rating,0)/rated.length:0;
-  const r=rank(),n=L.length;
+  const r=rank(),n=L.filter(x=>!x.adj).length;
   const cards=[
     ['linear-gradient(160deg,#FF2D6F,#7A1FA2)','Your Replay','Resident Run',n?'Swipe through your study story.':'Finish your first patient to start your story.'],
     ['linear-gradient(160deg,#14D8FF,#0A4DFF)','Focus time',hrs(tot)+' h',`${n} patient${n===1?'':'s'} treated`],
