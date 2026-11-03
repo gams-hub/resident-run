@@ -227,6 +227,10 @@ dialog{background:var(--glass);backdrop-filter:blur(30px) saturate(190%);-webkit
 .rplys h2{font-family:var(--round);font-size:clamp(44px,15vw,72px);line-height:1;margin:14px 0 12px;letter-spacing:-.03em}
 .rplys p{font-size:20px;font-weight:600;opacity:.9;margin:0}.rplys em{position:absolute;bottom:calc(30px + env(safe-area-inset-bottom,0px));left:28px;font-style:normal;opacity:.7;font-weight:600}
 .rplyx{position:absolute;z-index:2;top:calc(14px + env(safe-area-inset-top,0px));right:16px;padding:8px 16px;border-radius:99px;color:#fff;font-weight:700;background:rgba(255,255,255,.2);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+
+/* hide scrollbars, scrolling still works */
+html,body,*{scrollbar-width:none;-ms-overflow-style:none}
+*::-webkit-scrollbar{display:none;width:0;height:0}
 </style>
 <style id="pwa">
 /* only for the installed home-screen app; hosted pages get their own insets */
